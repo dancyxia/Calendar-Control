@@ -5,5 +5,7 @@
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
     -->
     <dimen name="activity_horizontal_margin">128dp</dimen>
+    <dimen name="datelabelsize">15sp</dimen>
+    <dimen name="daytextsize">20sp</dimen>
 
 </resources>

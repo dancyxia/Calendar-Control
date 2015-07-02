@@ -9,7 +9,10 @@ import java.util.List;
 
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -21,32 +24,40 @@ import android.widget.TextView;
  *
  */
 public class WeekListAdapter implements ListAdapter {
-	
+	final public static int maxRow = 7;
 	private static class ViewHolder {
-		TextView weekView;
+		CellTextView[] dayViews = new CellTextView[7];
 	}
 
 	List<Calendar> firstWeekDayList = new ArrayList<Calendar>();
 	final int firstDayOfWeek = Calendar.SUNDAY;
-	Context context;
+    private static Calendar today = Calendar.getInstance();
+    Context context;
 	
 	public WeekListAdapter(Context context, Calendar firstDayOfMonth) {
 		this.context = context;
-		Calendar next = (Calendar)firstDayOfMonth.clone();
+        setFirstDayOfMonth(firstDayOfMonth);
+	}
+
+    public void setFirstDayOfMonth(Calendar firstDayOfMonth) {
+        firstWeekDayList.clear();
+        Calendar next = (Calendar)firstDayOfMonth.clone();
         next.add(Calendar.DATE, firstDayOfWeek - firstDayOfMonth.get(Calendar.DAY_OF_WEEK));
         firstWeekDayList.add(next); //this is the header
         firstWeekDayList.add((Calendar)next.clone());
-		boolean stop = false;
-		while(!stop) {
-			next = (Calendar)next.clone();
-			next.add(Calendar.WEEK_OF_MONTH, 1);
-			if (next.get(Calendar.MONTH) == firstDayOfMonth.get(Calendar.MONTH)) {
-				firstWeekDayList.add(next);
-			} else {
-				stop = true;
-			}
-		}
-	}
+//reserve commented code. This is to allow for dynamiclly changing the list view height. I am not able to figure out a good solution so far
+//        boolean stop = false;
+//        while(!stop) {
+        while(firstWeekDayList.size() < maxRow) {
+            next = (Calendar)next.clone();
+            next.add(Calendar.WEEK_OF_MONTH, 1);
+//            if (next.get(Calendar.MONTH) == firstDayOfMonth.get(Calendar.MONTH)) {
+                firstWeekDayList.add(next);
+//            } else {
+//                stop = true;
+//            }
+        }
+    }
 
 	/* (non-Javadoc)
 	 * @see android.widget.Adapter#getCount()
@@ -54,7 +65,7 @@ public class WeekListAdapter implements ListAdapter {
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return firstWeekDayList.size();
+		return maxRow;//firstWeekDayList.size();
 	}
 
 	/* (non-Javadoc)
@@ -62,8 +73,8 @@ public class WeekListAdapter implements ListAdapter {
 	 */
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
-		return firstWeekDayList.get(position);
+		//keep it immutual
+		return firstWeekDayList.get(position).clone();
 	}
 
 	/* (non-Javadoc)
@@ -89,38 +100,56 @@ public class WeekListAdapter implements ListAdapter {
 	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View weekContainer = convertView;
-		if (weekContainer == null) {
-//sample1: by constructing			
-//			weekContainer = new TextView(context);
-//			((TextView)weekContainer).setText("by constructing");
-//Sample2: by inflating
-//			LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//			weekContainer = inflater.inflate(R.layout.week_row, null);
-//			ViewHolder holder = new ViewHolder();
-//			holder.weekView = (TextView)weekContainer.findViewById(R.id.week);
-//			holder.weekView.setText("by inflating");
-//			weekContainer.setTag(holder);
+        MyLog.d(1, "getView is called");
+		WeekView weekContainer = (WeekView)convertView;
+        ViewHolder holder;
+		if (weekContainer == null)
+        {
+            weekContainer = new WeekView(context);
+            holder = new ViewHolder();
+            for (int i = 0; i < 7; i++) {
+                holder.dayViews[i] = new CellTextView(context);
+                 weekContainer.addView(holder.dayViews[i]);
+            }
+            weekContainer.setTag(holder);
+        } else {
+            holder = (ViewHolder)weekContainer.getTag();
+        }
 
-			weekContainer= new WeekView(context);
-			Calendar c = this.firstWeekDayList.get(position);
-			MyLog.d(0, "first day of the week: %d",c.get(Calendar.DATE));
-			((WeekView)weekContainer).setFirstDayOfWeek(c);
-			for (int i=0; i<7; i++) {
-				CellTextView cell = new CellTextView(context);
-				if (position == 0) {
-					cell.setTextSize(cell.getTextSize()*0.6f);
-					cell.setText(String.format("%1$ta", c));	
-				} else {
-					cell.setText(String.format("%1$-10te", c));	
-				}
-				
-	            c.add(Calendar.DATE, 1);
-				((WeekView)weekContainer).addView(cell);
-			}
-			MyLog.d(0, "children are added");
-		}
-		
+        Calendar c =(Calendar) this.firstWeekDayList.get(position).clone();
+        float textSize;
+        String textFormat;
+        if (position == 0) {
+            weekContainer.setType(WeekView.LabelType.HEADER);
+            textSize = context.getResources().getDimension(R.dimen.datelabelsize);
+            textFormat = "%1$ta";
+        } else {
+            weekContainer.setType(WeekView.LabelType.DAY);
+            textSize = context.getResources().getDimension(R.dimen.daytextsize);
+            textFormat = "%1$-2td";
+        }
+
+        for (int i = 0; i < 7; i++) {
+            CellTextView cell = holder.dayViews[i];
+            cell.setIsToday(false);
+            int mask = 0xff000000;
+            cell.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+            cell.setText(String.format(textFormat, c));
+            if (position != 0) {
+                if (c.get(Calendar.MONTH) != firstWeekDayList.get(2).get(Calendar.MONTH)) {
+                    mask = context.getResources().getColor(R.color.grey_mask);
+                } else {
+                    if (c.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR) && c.get(Calendar.YEAR) == today.get(Calendar.YEAR))
+                        cell.setIsToday(true);
+                }
+            }
+
+            if (c.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
+                cell.setTextColor(mask | context.getResources().getColor(R.color.holiday_color));
+            else
+                cell.setTextColor(mask | context.getResources().getColor(R.color.regularday_color));
+            c.add(Calendar.DATE, 1);
+        }
 		return weekContainer;
 	}
 

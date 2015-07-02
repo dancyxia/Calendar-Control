@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="frame_color">#ffccccff</color>
+    <color name="frame_color">#ff212121</color>
+    <color name="holiday_color">#00ff5555</color>
+    <color name="regularday_color">#00333333</color>
+    <color name="grey_mask">#88000000</color>
 </resources>
