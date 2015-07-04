@@ -53,7 +53,4 @@ public class MainActivity extends Activity {
 		View thisView = super.onCreateView(name, context, attrs);
 		return thisView;
 	}
-	
-	
-
 }

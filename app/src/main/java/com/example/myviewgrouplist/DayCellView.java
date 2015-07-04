@@ -2,27 +2,26 @@ package com.example.myviewgrouplist;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.TextView;
 
-public class CellTextView extends TextView {
+public class DayCellView extends TextView {
 
     boolean isToday = false;
 
-	public CellTextView(Context context) {
+	public DayCellView(Context context) {
 		super(context);
 		init();
 	}
 
-	public CellTextView(Context context, AttributeSet attrs, int defStyle) {
+	public DayCellView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init();
 	}
 
-	public CellTextView(Context context, AttributeSet attrs) {
+	public DayCellView(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
 		init();
 	}
@@ -41,7 +40,7 @@ public class CellTextView extends TextView {
         super.onDraw(canvas);
         if (isToday) {
             Drawable bg = getContext().getResources().getDrawable(R.drawable.today_background);
-            bg.setBounds(2, 2, getMeasuredWidth()-2,getMeasuredHeight()-2);
+            bg.setBounds(2, 2, getWidth()-2,getHeight()-2);
             bg.draw(canvas);
         }
     }

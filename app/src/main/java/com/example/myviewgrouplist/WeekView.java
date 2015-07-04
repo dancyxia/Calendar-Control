@@ -46,17 +46,14 @@ public class WeekView extends ViewGroup {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             return;
         }
-//        MyLog.d(1, "content view measured wdith: %d, height: %d, width: %d, height %d",contentView.getMeasuredWidth(), contentView.getMeasuredHeight(), contentView.getWidth(), contentView.getHeight());
-
         final int childCount = this.getChildCount();
 
         int rowWidth = MeasureSpec.getSize(widthMeasureSpec);
 		int cellWidth = rowWidth/childCount;
 
-        int minHeight = pager.getMeasuredHeight()/WeekListAdapter.maxRow;
+        int minHeight = pager.getHeight()/WeekListAdapter.maxRow;
         int paddingHeight = (int)getContext().getResources().getDimension(R.dimen.padding)<<1;
         int rowHeight = Math.min(type == LabelType.HEADER? (int)getContext().getResources().getDimension(R.dimen.datelabelsize)+paddingHeight : (int)getContext().getResources().getDimension(R.dimen.daytextsize)+paddingHeight, minHeight);
-        MyLog.d(1,"minHeight: %d, rowHeight: %d", minHeight, rowHeight);
 		int cellWidthMeasureSpec = MeasureSpec.makeMeasureSpec(cellWidth, MeasureSpec.EXACTLY);
 		int cellHeightMeasureSpec = MeasureSpec.makeMeasureSpec(rowHeight, MeasureSpec.EXACTLY);
 		View child = null;

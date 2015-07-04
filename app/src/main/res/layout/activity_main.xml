@@ -21,7 +21,7 @@
     <com.example.myviewgrouplist.CalendarMonthView
         android:id="@+id/listview"
         app:dividercolor="@color/frame_color"
-        app:dividerwidth="3px"
+        app:dividerwidth="5px"
         android:layout_below="@id/title"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"/>

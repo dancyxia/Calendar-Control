@@ -9,15 +9,10 @@ import java.util.List;
 
 import android.content.Context;
 import android.database.DataSetObserver;
-import android.graphics.Color;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ListAdapter;
-import android.widget.TextView;
 
 /**
  * @author dancy
@@ -26,7 +21,7 @@ import android.widget.TextView;
 public class WeekListAdapter implements ListAdapter {
 	final public static int maxRow = 7;
 	private static class ViewHolder {
-		CellTextView[] dayViews = new CellTextView[7];
+		DayCellView[] dayViews = new DayCellView[7];
 	}
 
 	List<Calendar> firstWeekDayList = new ArrayList<Calendar>();
@@ -40,7 +35,9 @@ public class WeekListAdapter implements ListAdapter {
 	}
 
     public void setFirstDayOfMonth(Calendar firstDayOfMonth) {
-        firstWeekDayList.clear();
+//        firstWeekDayList.clear();;
+        firstWeekDayList = new ArrayList<Calendar>(maxRow);
+        MyLog.d(1, "setMonth: %s, list size: %d", String.format("%1$tB, %1$tY", firstDayOfMonth), firstWeekDayList.size());
         Calendar next = (Calendar)firstDayOfMonth.clone();
         next.add(Calendar.DATE, firstDayOfWeek - firstDayOfMonth.get(Calendar.DAY_OF_WEEK));
         firstWeekDayList.add(next); //this is the header
@@ -108,7 +105,7 @@ public class WeekListAdapter implements ListAdapter {
             weekContainer = new WeekView(context);
             holder = new ViewHolder();
             for (int i = 0; i < 7; i++) {
-                holder.dayViews[i] = new CellTextView(context);
+                holder.dayViews[i] = new DayCellView(context);
                  weekContainer.addView(holder.dayViews[i]);
             }
             weekContainer.setTag(holder);
@@ -130,7 +127,7 @@ public class WeekListAdapter implements ListAdapter {
         }
 
         for (int i = 0; i < 7; i++) {
-            CellTextView cell = holder.dayViews[i];
+            DayCellView cell = holder.dayViews[i];
             cell.setIsToday(false);
             int mask = 0xff000000;
             cell.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);

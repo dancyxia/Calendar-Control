@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -46,24 +45,44 @@ public class MonthFragment extends Fragment {
         if (container == null)
             return null;
         ViewGroup view = (ViewGroup)inflater.inflate(R.layout.activity_main, null);
-        setView(view);
+        updateView(view);
         return view;
     }
 
-    public void setView(ViewGroup rootView) {
+    private static class ViewHolder {
+        TextView titleView;
+        CalendarMonthView monthView;
+    }
+
+    public void updateView(ViewGroup rootView) {
         int index = this.getArguments().getInt("index");
         Calendar thisMonth =(Calendar)MonthlyCalendarActivity.currentMonth.clone();
-        thisMonth.add(Calendar.MONTH, index - 1);
+        thisMonth.add(Calendar.MONTH, index - 1);  //index for previous month is 0, need to minus one month(0-1=-1); for next month is 2, need to add one month(2-1=1)
+
         if (monthChangeListener != null)
             monthChangeListener.onMonthChanged(MonthlyCalendarActivity.currentMonth);
 
-        TextView titleView = (TextView)rootView.findViewById(R.id.title);
-        CalendarMonthView listView = (CalendarMonthView)rootView.findViewById(R.id.listview);
+        ViewHolder holder = (ViewHolder)rootView.getTag();
+        TextView titleView;
+        CalendarMonthView monthView;
+        if (holder != null) {
+            titleView = holder.titleView;
+            monthView = holder.monthView;
+            ((WeekListAdapter)monthView.getAdapter()).setFirstDayOfMonth(thisMonth);
+            //need to call setAdapter again to make the update take effect(is there any better way?)
+            monthView.setAdapter(monthView.getAdapter());
+        } else {
+            titleView = (TextView) rootView.findViewById(R.id.title);
+            holder = new ViewHolder();
+            holder.titleView = titleView;
+            rootView.setTag(holder);
+            monthView = (CalendarMonthView) rootView.findViewById(R.id.listview);
+            holder.monthView = monthView;
+            WeekListAdapter adapter = new WeekListAdapter(rootView.getContext(), thisMonth);
+            monthView.setAdapter(adapter);
+        }
 
         titleView.setPadding(0, 0, 0, 10);
         titleView.setText(String.format("%1$tB, %1$tY", thisMonth));
-
-        WeekListAdapter adapter = new WeekListAdapter(rootView.getContext(), thisMonth);
-        listView.setAdapter(adapter);
     }
 }

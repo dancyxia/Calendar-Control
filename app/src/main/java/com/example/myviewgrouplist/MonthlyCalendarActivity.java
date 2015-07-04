@@ -46,12 +46,12 @@ public class MonthlyCalendarActivity extends FragmentActivity implements MonthFr
 		setContentView(R.layout.calendar_month_pager);
 
         noteView = (TextView)findViewById(R.id.note);
-		final MonthPagerAdapter pageAdapter = new MonthPagerAdapter(this.getSupportFragmentManager(), this);
+		final MonthPagerAdapter pageAdapter = new MonthPagerAdapter(this.getSupportFragmentManager());
 		final ViewPager pager = (ViewPager)this.findViewById(R.id.pager);
 		pager.setAdapter(pageAdapter);
-		pager.setCurrentItem(1);
+		pager.setCurrentItem(1); //the index for current month is 1
 
-		pager. addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+		pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
             public void onPageSelected(int position) {
@@ -59,35 +59,29 @@ public class MonthlyCalendarActivity extends FragmentActivity implements MonthFr
             }
 
             @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-                // TODO Auto-generated method stub
-            }
+            public void onPageScrolled(int arg0, float arg1, int arg2) {}
 
             @Override
             public void onPageScrollStateChanged(int state) {
                 if (state == ViewPager.SCROLL_STATE_IDLE) {
                     currentMonth.add(Calendar.MONTH, currentIndex - 1);
-                    pager.setCurrentItem(1, false);//this does the tricky
+                    pager.setCurrentItem(1, false);//this does the trick
                     for (int i = 0; i < 3; i++) {
                         MonthFragment fragment = (MonthFragment) ((MonthPagerAdapter) pager.getAdapter()).instantiateItem(pager, i);
                         ViewGroup rootView = (ViewGroup) fragment.getView();
                         if (rootView != null) {
-                            fragment.setView(rootView);
+                            fragment.updateView(rootView);
                         }
                     }
                 }
             }
-
-            ;
         });
 	}
 
 	private static class MonthPagerAdapter extends FragmentPagerAdapter {
-        private MonthlyCalendarActivity context;
 
-		public MonthPagerAdapter(FragmentManager fm, MonthlyCalendarActivity context) {
+		public MonthPagerAdapter(FragmentManager fm) {
             super(fm);
-            this.context = context;
 		}
 
 		@Override
