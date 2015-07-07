@@ -1,4 +1,4 @@
-package com.example.myviewgrouplist;
+package com.home.purecalendar;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.example.myviewgrouplist;
+package com.home.purecalendar;
 
 import java.util.ArrayList;
 import java.util.Calendar;

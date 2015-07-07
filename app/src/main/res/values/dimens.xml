@@ -7,4 +7,6 @@
     <dimen name="daytextsize">15sp</dimen>
     <dimen name="padding">10dp</dimen>
 
+    <dimen name="fab_size">50dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

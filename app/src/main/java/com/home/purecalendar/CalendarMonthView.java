@@ -1,12 +1,10 @@
-package com.example.myviewgrouplist;
+package com.home.purecalendar;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Picture;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 

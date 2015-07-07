@@ -18,7 +18,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
     />
-    <com.example.myviewgrouplist.CalendarMonthView
+    <com.home.purecalendar.CalendarMonthView
         android:id="@+id/listview"
         app:dividercolor="@color/frame_color"
         app:dividerwidth="5px"

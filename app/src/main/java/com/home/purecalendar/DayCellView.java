@@ -1,4 +1,4 @@
-package com.example.myviewgrouplist;
+package com.home.purecalendar;
 
 import android.content.Context;
 import android.graphics.Canvas;

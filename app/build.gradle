@@ -1,22 +1,39 @@
 apply plugin: 'android'
 
 android {
-    compileSdkVersion 18
-    buildToolsVersion '19.1.0'
-
-    defaultConfig {
-        minSdkVersion 8
-        targetSdkVersion 18
+    signingConfigs {
+        config {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('D:/projects/.android/debug.keystore')
+            storePassword 'android'
+        }
     }
-
+    compileSdkVersion 22
+    buildToolsVersion '22.0.1'
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 22
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
 }
 
 dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:support-v13:22.2.0'
+    compile 'com.android.support:palette-v7:22.2.0'
+    compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.android.support:cardview-v7:22.2.0'
 }

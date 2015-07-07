@@ -1,4 +1,4 @@
-package com.example.myviewgrouplist;
+package com.home.purecalendar;
 
 import java.util.Calendar;
 
@@ -6,10 +6,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
