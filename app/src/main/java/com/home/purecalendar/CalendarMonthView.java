@@ -27,7 +27,11 @@ public class CalendarMonthView extends ListView {
         dividerWidth = Math.min((int)ta.getDimension(R.styleable.CalendarMonthView_dividerwidth, 1), maxDividerWidth);
 		framePaint.setColor(ta.getColor(R.styleable.CalendarMonthView_dividercolor, 0xff333333));
 		framePaint.setStrokeWidth(dividerWidth);
-	} 
+	}
+
+    public int getDividerWidth() {
+        return dividerWidth;
+    }
 
 	@Override
 	protected void dispatchDraw(Canvas canvas) {
@@ -55,7 +59,7 @@ public class CalendarMonthView extends ListView {
         top = weekView.getTop();
         for (int i=0; i< 7; i++) {
             canvas.drawLine(left, top, left, bottom, framePaint);
-            left += cellWidth;
+            left += cellWidth+dividerWidth;
         }
         //use the view's right position instead of the calculated result because the calculation result might be
         //a little different from the right position.
