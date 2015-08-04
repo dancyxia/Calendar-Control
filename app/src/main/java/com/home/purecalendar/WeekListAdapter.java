@@ -35,8 +35,8 @@ public class WeekListAdapter implements ListAdapter {
 	}
 
     public void setFirstDayOfMonth(Calendar firstDayOfMonth) {
-//        firstWeekDayList.clear();;
-        firstWeekDayList = new ArrayList<Calendar>(maxRow);
+        firstWeekDayList.clear();;
+//        firstWeekDayList = new ArrayList<Calendar>(maxRow);
         MyLog.d(1, "setMonth: %s, list size: %d", String.format("%1$tB, %1$tY", firstDayOfMonth), firstWeekDayList.size());
         Calendar next = (Calendar)firstDayOfMonth.clone();
         next.add(Calendar.DATE, firstDayOfWeek - firstDayOfMonth.get(Calendar.DAY_OF_WEEK));
@@ -97,7 +97,7 @@ public class WeekListAdapter implements ListAdapter {
 	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-        MyLog.d(1, "getView is called");
+        MyLog.d(0, "getView is called");
 		WeekView weekContainer = (WeekView)convertView;
         ViewHolder holder;
 		if (weekContainer == null)

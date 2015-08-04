@@ -2,29 +2,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_weight="1"
+    <include android:id="@id/actionbar"
+        layout="@layout/calendar_actionbar"
+        />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_width="wrap_content" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="10dp"
-        android:layout_height="match_parent"
-        android:background="@drawable/separator_gradient_color_land"  />
-
-     <TextView
-            android:id="@+id/note"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
             android:layout_weight="1"
-            android:gravity="center"
-            android:text="note"
-            android:textSize="20sp"
-    />
+            android:layout_height="match_parent"
+            android:layout_width="0dp" />
 
-</LinearLayout>
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/separator_gradient_color_land"  />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+            <FrameLayout
+                android:id="@+id/holidayscontainer"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:gravity="center"
+                android:textSize="20sp"
+                />
+            <ImageButton
+                android:id="@+id/btnAddHoliday"
+                android:layout_width="@dimen/fab_size"
+                android:layout_height="@dimen/fab_size"
+                android:layout_margin="@dimen/fab_margin"
+                android:background="@drawable/fab_background"
+                android:src="@drawable/ic_action"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+ </LinearLayout>
