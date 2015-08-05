@@ -3,18 +3,13 @@
  */
 package com.home.purecalendar;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
 import android.accounts.AccountManager;
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,36 +22,38 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.calendar.CalendarScopes;
+//import com.google.android.gms.common.ConnectionResult;
+//import com.google.android.gms.common.GooglePlayServicesUtil;
+//import com.google.api.client.http.HttpTransport;
+//import com.google.api.client.extensions.android.http.AndroidHttp;
+//import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+//import com.google.api.client.json.JsonFactory;
+//import com.google.api.client.json.gson.GsonFactory;
+//import com.google.api.client.util.ExponentialBackOff;
+//import com.google.api.services.calendar.CalendarScopes;
 
 /**
  * @author dancy
  *
  */
 public class MonthlyCalendarActivity extends AppCompatActivity implements MonthFragment.MonthChangeListener, HolidayFragment.OnFragmentInteractionListener {
-    com.google.api.services.calendar.Calendar mService;
-
-    GoogleAccountCredential credential;
-    final HttpTransport transport = AndroidHttp.newCompatibleTransport();
-    final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
+//  remote client
+//    com.google.api.services.calendar.Calendar mService;
+//
+//    GoogleAccountCredential credential;
+//    final HttpTransport transport = AndroidHttp.newCompatibleTransport();
+//    final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
 
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     private static final String PREF_ACCOUNT_NAME = "accountName";
-    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY };
+//    remote client
+    //    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY };
 
     public static Calendar currentMonth;
 	static int currentIndex = 0;
-    private FrameLayout noteView;
+    private FrameLayout holidayContainer;
     private AppCompatActivity context;
 
 	/**
@@ -70,18 +67,19 @@ public class MonthlyCalendarActivity extends AppCompatActivity implements MonthF
 
     @Override
     public void onMonthChanged(Calendar thisMonth) {
-//        if (noteView != null)
-//            noteView.setText("Happy "+String.format("%1$tB, %1$tY", thisMonth));
+//        if (holidayContainer != null)
+//            holidayContainer.setText("Happy "+String.format("%1$tB, %1$tY", thisMonth));
     }
 
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.FragmentActivity#onCreate(android.os.Bundle)
 	 */
 	@Override
-	protected void onCreate(Bundle arg0) {
-		super.onCreate(arg0);
+	protected void onCreate(Bundle savedInstance) {
+		super.onCreate(savedInstance);
 		setContentView(R.layout.calendar_month_pager);
 
+        //create actionbar
         Toolbar actionBar = (Toolbar)findViewById(R.id.actionbar);
         if (actionBar != null) {
             actionBar.setLogo(R.drawable.ic_launcher);
@@ -89,11 +87,18 @@ public class MonthlyCalendarActivity extends AppCompatActivity implements MonthF
             setSupportActionBar(actionBar);
         }
 
-        //noteView = (TextView)findViewById(R.id.note);
-        noteView = (FrameLayout)findViewById(R.id.holidayscontainer);
-        getSupportFragmentManager().beginTransaction().add(R.id.holidayscontainer, HolidayFragment.newInstance("", ""), "holidayfragment").commit();
+        //add holiday fragment
+        holidayContainer = (FrameLayout)findViewById(R.id.holidayscontainer);
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.findFragmentByTag("holidayfragment") == null)
+            fm.beginTransaction().add(R.id.holidayscontainer, HolidayFragment.newInstance("", ""), "holidayfragment").commit();
 
-		final MonthPagerAdapter pageAdapter = new MonthPagerAdapter(this.getSupportFragmentManager());
+        //add month view
+        int month;
+        if (savedInstance != null && (month = savedInstance.getInt("currentmonth")) != 0) {
+            currentMonth.set(Calendar.MONTH, month);
+        }
+        final MonthPagerAdapter pageAdapter = new MonthPagerAdapter(fm);
 		final ViewPager pager = (ViewPager)this.findViewById(R.id.pager);
 		pager.setAdapter(pageAdapter);
 		pager.setCurrentItem(1); //the index for current month is 1
@@ -127,16 +132,17 @@ public class MonthlyCalendarActivity extends AppCompatActivity implements MonthF
         // Initialize credentials and service object.
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
         MyLog.d(1, "confidential: %s", settings.getString(PREF_ACCOUNT_NAME, null));
-        credential = GoogleAccountCredential.usingOAuth2(
-                getApplicationContext(), Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff())
-                .setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
-
-        mService = new com.google.api.services.calendar.Calendar.Builder(
-                transport, jsonFactory, credential)
-                .setApplicationName("Google Calendar API Android Quickstart")
-                .build();
-
+//    remote client
+//        credential = GoogleAccountCredential.usingOAuth2(
+//                getApplicationContext(), Arrays.asList(SCOPES))
+//                .setBackOff(new ExponentialBackOff())
+//                .setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
+//
+//        mService = new com.google.api.services.calendar.Calendar.Builder(
+//                transport, jsonFactory, credential)
+//                .setApplicationName("Google Calendar API Android Quickstart")
+//                .build();
+//
     }
 
     @Override
@@ -149,6 +155,12 @@ public class MonthlyCalendarActivity extends AppCompatActivity implements MonthF
         }
 
         super.onResume();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("currentmonth", currentMonth.get(Calendar.MONTH));
     }
 
     /**
@@ -177,7 +189,8 @@ public class MonthlyCalendarActivity extends AppCompatActivity implements MonthF
                     String accountName =
                             data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
-                        credential.setSelectedAccountName(accountName);
+//    remote client
+//                        credential.setSelectedAccountName(accountName);
                         SharedPreferences settings =
                                 getPreferences(Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = settings.edit();
@@ -204,15 +217,17 @@ public class MonthlyCalendarActivity extends AppCompatActivity implements MonthF
      * user can pick an account.
      */
     private void refreshResults() {
-        if (credential.getSelectedAccountName() == null) {
-            chooseAccount();
-        } else {
-            if (isDeviceOnline()) {
-                new ApiAsyncTask(this).execute();
-            } else {
-                Toast.makeText(context, "No network connection available.", Toast.LENGTH_LONG);
-            }
-        }
+//    remote client
+//        if (credential.getSelectedAccountName() == null) {
+//            chooseAccount();
+//        } else {
+////            if (isDeviceOnline()) {
+////                remote client
+////                new ApiAsyncTask(this).execute();
+////            } else {
+//                Toast.makeText(context, "No network connection available.", Toast.LENGTH_LONG);
+////            }
+//        }
     }
 
     /**
@@ -274,20 +289,22 @@ public class MonthlyCalendarActivity extends AppCompatActivity implements MonthF
      * account.
      */
     private void chooseAccount() {
-        startActivityForResult(
-                credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
+//    remote client
+//        startActivityForResult(
+//                credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
     }
 
     /**
      * Checks whether the device currently has a network connection.
      * @return true if the device has a network connection, false otherwise.
      */
-    private boolean isDeviceOnline() {
-        ConnectivityManager connMgr =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
-    }
+//    remote client
+//    private boolean isDeviceOnline() {
+//        ConnectivityManager connMgr =
+//                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+//        return (networkInfo != null && networkInfo.isConnected());
+//    }
 
     /**
      * Check that Google Play services APK is installed and up to date. Will
@@ -297,14 +314,15 @@ public class MonthlyCalendarActivity extends AppCompatActivity implements MonthF
      *     date on this device; false otherwise.
      */
     private boolean isGooglePlayServicesAvailable() {
-        final int connectionStatusCode =
-                GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (GooglePlayServicesUtil.isUserRecoverableError(connectionStatusCode)) {
-            showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
-            return false;
-        } else if (connectionStatusCode != ConnectionResult.SUCCESS ) {
-            return false;
-        }
+//        remote client
+//        final int connectionStatusCode =
+//                GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+//        if (GooglePlayServicesUtil.isUserRecoverableError(connectionStatusCode)) {
+//            showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
+//            return false;
+//        } else if (connectionStatusCode != ConnectionResult.SUCCESS ) {
+//            return false;
+//        }
         return true;
     }
 
@@ -315,15 +333,17 @@ public class MonthlyCalendarActivity extends AppCompatActivity implements MonthF
      *     Google Play Services on this device.
      */
     void showGooglePlayServicesAvailabilityErrorDialog(
+//    remote client
             final int connectionStatusCode) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
-                        connectionStatusCode,
-                        MonthlyCalendarActivity.this,
-                        REQUEST_GOOGLE_PLAY_SERVICES);
-                dialog.show();
+//    remote client
+//                Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
+//                        connectionStatusCode,
+//                        MonthlyCalendarActivity.this,
+//                        REQUEST_GOOGLE_PLAY_SERVICES);
+//                dialog.show();
             }
         });
     }

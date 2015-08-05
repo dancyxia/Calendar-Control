@@ -30,15 +30,24 @@ public class HolidayContent {
 
     static {
         // Add 3 sample items.
-//        addItem(new HolidayInfo("1", "dummy holiday 1", "ic_heart"));
-//        addItem(new HolidayInfo("2", "dummy holiday 2", "ic_leaf"));
-//        addItem(new HolidayInfo("3", "dummy holiday 3"));
-//        addItem(new HolidayInfo("4", "dummy holiday 4", "ic_heart"));
-//        addItem(new HolidayInfo("5", "dummy holiday 5", "ic_leaf"));
-//        addItem(new HolidayInfo("6", "dummy holiday 6"));
-//        addItem(new HolidayInfo("7", "dummy holiday 7", "ic_heart"));
-//        addItem(new HolidayInfo("8", "dummy holiday 8", "ic_leaf"));
-//        addItem(new HolidayInfo("9", "dummy holiday 9"));
+        addItem(new HolidayInfo("1", "dummy holiday 1", "ic_heart"));
+        addItem(new HolidayInfo("2", "dummy holiday 2", "ic_leaf"));
+        addItem(new HolidayInfo("3", "dummy holiday 3"));
+        addItem(new HolidayInfo("4", "dummy holiday 4", "ic_heart"));
+        addItem(new HolidayInfo("5", "dummy holiday 5", "ic_leaf"));
+        addItem(new HolidayInfo("6", "dummy holiday 6"));
+        addItem(new HolidayInfo("7", "dummy holiday 7", "ic_heart"));
+        addItem(new HolidayInfo("8", "dummy holiday 8", "ic_leaf"));
+        addItem(new HolidayInfo("9", "dummy holiday 9"));
+        addItem(new HolidayInfo("10", "dummy holiday 1", "ic_heart"));
+        addItem(new HolidayInfo("12", "dummy holiday 2", "ic_leaf"));
+        addItem(new HolidayInfo("13", "dummy holiday 3"));
+        addItem(new HolidayInfo("14", "dummy holiday 4", "ic_heart"));
+        addItem(new HolidayInfo("15", "dummy holiday 5", "ic_leaf"));
+        addItem(new HolidayInfo("16", "dummy holiday 6"));
+        addItem(new HolidayInfo("17", "dummy holiday 7", "ic_heart"));
+        addItem(new HolidayInfo("18", "dummy holiday 8", "ic_leaf"));
+        addItem(new HolidayInfo("19", "dummy holiday 9"));
     }
 
     public static void addHoliday(String name) {
